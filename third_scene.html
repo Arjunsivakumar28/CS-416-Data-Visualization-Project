@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Second Scene</title>
+
+    <!-- Load Styles from CSS -->
+    <link rel='stylesheet' type='text/css' href='./CSS/third_style.css'>
+
+    <!-- Load D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <!-- Load custom scripts -->
+    <script src='./JS/third_script.js' type="module"></script>
+</head>
+<body>
+    <h1>Champion Players Define Champion Teams!</h1>
+    <div class="description">
+        Delving into this further, a sign of a dominant team is one with dominnt players. Therefore, an analysis of the number of player of the match awards won be individual players of each country could give an idea on if the burden of success is on a handful of players or split equally among the players
+        <ul>
+            <li>The bar chart below shows the distribuition of player of match awards for a nation</li>
+            <li>The selection box can be used to filter and view for each nation</li>
+            <li>Certain countries such as India and England have uneven distribuition while New Zealand has a very even distribuition </li>
+            <li>Uneven distribuition could indicate reliance on exceptional players while even distribuition shows complete team effort</li>
+        </ul>
+    </div>
+    <h3>Choose Country</h3>
+    <select name="metrics" id="metrics" onchange="changeMetric(this);" onfocus="this.selectedIndex = -1;">
+        <option value="Australia">Australia</option>
+        <option value="India">India</option>
+        <option value="Sri_Lanka">Sri Lanka</option>
+        <option value="Scotland">Scotland</option>
+        <option value="Bangladesh">Bangladesh</option>
+        <option value="Oman">Oman</option>
+        <option value="Namibia">Namibia</option>
+        <option value="Pakistan">Pakistan</option>
+        <option value="Afghanistan">Afghanistan</option>
+        <option value="Ireland">Ireland</option>
+        <option value="New_Zealand">New Zealand</option>
+        <option value="Zimbabwe">Zimbabwe</option>
+        <option value="Netherlands">Netherlands</option>
+        <option value="England">England</option>
+        <option value="South_Africa">South Africa</option>
+        <option value="West_Indies">West Indies</option>
+        <option value="United_Arab_Emirates">United Arab Emirates</option>
+        <option value="United_States_of_America">United States of America</option>
+        <option value="Uganda">Uganda</option>
+        <option value="Canada">Canada</option>
+        <option value="Nepal">Nepal</option>
+        <option value="Hong_Kong">Hong Kong</option>
+    </select>
+    <br>
+    <svg width="1100" height="500"></svg>
+    <div class="tooltip"></div>
+    <div class="nav-buttons">
+        <button onclick="window.location.href = 'second_scene.html'">Previous</button>
+        <button onclick="window.location.href = 'conclusion.html'">Next</button>
+    </div>
+    <script type="module">
+        import { changeMetric } from "./JS/third_script.js";
+        window.changeMetric = changeMetric;
+    </script>
+</body>
+</html>

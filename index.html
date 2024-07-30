@@ -3,19 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Main</title>
 
-    <!-- Load Styles from CSS -->
-    <link rel='stylesheet' type='text/css' href='./CSS/style.css'>
+     <!-- Load Styles from CSS -->
+     <link rel='stylesheet' type='text/css' href='./CSS/title_style.css'>
 
-    <!-- Load D3 library -->
-    <script src="https://d3js.org/d3.v6.min.js"></script>
-
-    <!-- Load custom scripts -->
-    <script type="text/javascript" src='./JS/script.js' charset='utf-8'></script>
+     <!-- Load D3.js -->
+     <script src="https://d3js.org/d3.v7.min.js"></script>
+     <!-- Load TopoJSON -->
+     <script src="https://d3js.org/topojson.v3.min.js"></script>
+ 
+     <!-- Load custom scripts -->
+     <script src='./JS/title_script.js' type="module"></script>
 
 </head>
 <body>
-    <div class="main">test</div>
+
+    <h1>Who is the Ultimate Champion of Cricket?</h1>
+    <div class="description">
+        Cricket is an age-old sport that evolved in England and spread across its colonies. Eventually, those under the British rule took their colonizers' game and made it a challenge to try and best the colonizers themselves. The eclectic and wide reach of the sport eventually demanded world champions to truly decide the ultimate champions. This analysis tries to answer the question: Can one country be specifically called the champion of all champions? Is there a country that has been consistently successful and dominant in the new age of the sport?
+    </div>
+
+    <div class="nav-buttons">
+        <!-- <button onclick="navigate('previous.html')">Previous</button> -->
+        <button onclick="window.location.href='first_scene.html'">Next</button>
+    </div>
+
+    
 </body>
 </html>

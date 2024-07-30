@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First Scene</title>
+
+    <!-- Load Styles from CSS -->
+    <link rel='stylesheet' type='text/css' href='./CSS/style.css'>
+
+    <!-- Load D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- Load TopoJSON -->
+    <script src="https://d3js.org/topojson.v3.min.js"></script>
+
+    <!-- Load custom scripts -->
+    <script src='./JS/script.js' type="module"></script>
+
+</head>
+<body>
+        <h1>Where Do All the countries Stand?</h1>
+        <div class="description">
+            To get an idea of dominance, it is important to first look at the basic metric: number of wins in championship tournaments
+            <ul>
+                <li>This is a world map with all countries that have played the T20 World Cup games highlighted</li>
+                <li>The size of the circle represents number of wins</li>
+                <li>Hovering can provide more details on each country, such as names and exact number of wins</li>
+                <li>Countries that stand out are United Kingdom (which includes England and Scotland), India, and South Africa</li>
+            </ul>
+        </div>
+    
+    <!-- <div class="main">Test if it works</div> -->
+    <svg></svg>
+    <div class="tooltip"></div>
+
+    <div class="legend"></div>
+
+    <div class="nav-buttons">
+        <button onclick="window.location.href = 'index.html'">Previous</button>
+        <button onclick="window.location.href = 'second_scene.html'">Next</button>
+    </div>
+
+</body>
+</html>

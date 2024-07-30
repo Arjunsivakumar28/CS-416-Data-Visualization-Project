@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Second Scene</title>
+
+    <!-- Load Styles from CSS -->
+    <link rel='stylesheet' type='text/css' href='./CSS/second_style.css'>
+
+    <!-- Load D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <!-- Load custom scripts -->
+    <script src='./JS/second_script.js' type="module"></script>
+</head>
+<body>
+    <h1>But We Need More...</h1>
+    <div class="description">
+        The margin of victory gives an idea of not just consitency and longetivity but also dominance
+        <ul>
+            <li>The bar chart below shows the average margin of victory for all the teams that have won</li>
+            <li>The selection box can be used to switch between the two possible methods of victory, by runs or by wickets</li>
+            <li>No bar indicates that the country has not won under that particular mode of victory</li>
+            <li>Hovering over each bar gives additional information on number of games won</li>
+            <li>Margin of runs seems to be a better metric of dominance under which, Afghanistan and Wet indies seem to excel</li>
+        </ul>
+    </div>
+    <select name="metrics" id="metrics" onchange="changeMetric(this);" onfocus="this.selectedIndex = -1;">
+        <option value="Runs">Margin of Victory in Runs</option>
+        <option value="Wickets">Margin of Victory in Wickets</option>
+    </select>
+    <br>
+    <svg width="1100" height="500"></svg>
+    <div class="tooltip"></div>
+    <div class="nav-buttons">
+        <button onclick="window.location.href = 'first_scene.html'">Previous</button>
+        <button onclick="window.location.href = 'third_scene.html'">Next</button>
+    </div>
+
+    <script>
+        function changeMetric(ele) {
+            if (ele.value == 'Runs') {
+               document.querySelectorAll('.wickets').forEach(item =>{
+                    item.style.display = 'none'
+               })
+               document.querySelectorAll('.runs').forEach(item => {
+                item.style.display = 'block'
+               })
+            } else if (ele.value == 'Wickets') {
+               document.querySelectorAll('.wickets').forEach(item => {
+                item.style.display = 'block'
+               })
+               document.querySelectorAll('.runs').forEach(item => {
+                item.style.display = 'none'
+               })
+            }
+         }
+    </script>
+</body>
+</html>
