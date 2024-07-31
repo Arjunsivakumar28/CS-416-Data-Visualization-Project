@@ -314,29 +314,34 @@ let timeout = setInterval(function () {
          svg.append("line")
                .attr("x1", ukCoordinates[0])
                .attr("y1", ukCoordinates[1])
-               .attr("x2", ukCoordinates[0] - 60)
-               .attr("y2", ukCoordinates[1] - 30)
+               .attr("x2", ukCoordinates[0] - 20)
+               .attr("y2", ukCoordinates[1] + 50)
                .attr("stroke", "black")
                .attr("marker-end", "url(#arrow)");
 
          svg.append("rect")
-               .attr("x", ukCoordinates[0] - 260)
-               .attr("y", ukCoordinates[1] - 70)
-               .attr("width", 200)
-               .attr("height", 40)
+               .attr("x", ukCoordinates[0] - 210)
+               .attr("y", ukCoordinates[1] + 50)
+               .attr("width", 230)
+               .attr("height", 50)
                .attr("fill", "white")
                .attr("stroke", "black");
 
          svg.append("text")
-               .attr("x", ukCoordinates[0] - 255)
-               .attr("y", ukCoordinates[1] - 50)
+               .attr("x", ukCoordinates[0] - 205)
+               .attr("y", ukCoordinates[1] + 60)
                .text("United Kingdom:")
                .attr("font-size", "12px");
 
          svg.append("text")
-               .attr("x", ukCoordinates[0] - 255)
-               .attr("y", ukCoordinates[1] - 35)
+               .attr("x", ukCoordinates[0] - 205)
+               .attr("y", ukCoordinates[1] + 75)
                .text("Includes England and Scotland")
+               .attr("font-size", "12px");
+         svg.append("text")
+               .attr("x", ukCoordinates[0] - 205)
+               .attr("y", ukCoordinates[1] + 90)
+               .text(`${GamesWonByCountriesData['England']} wins for England and ${GamesWonByCountriesData['Scotland']} wins for Scotland`)
                .attr("font-size", "12px");
 
       });

@@ -195,7 +195,7 @@ let timeout = setInterval(function () {
             tooltip.transition()
                .duration(200)
                .style("opacity", .9);
-            tooltip.html(`${d.country}<br>Number of Wins: ${d.numOfWins}`)
+            tooltip.html(`${d.country}<br>Number of Wins: ${d.runMargins.length}`)
                .style("left", (event.pageX + 5) + "px")
                .style("top", (event.pageY - 28) + "px");
          })
@@ -252,13 +252,35 @@ let timeout = setInterval(function () {
                return 0
             }
          })
-         .attr("fill", d => colorScheme[d.country]);
+         .attr("fill", d => colorScheme[d.country])
+         .on("mouseover", function (event, d) {
+            d3.select(this)
+               .raise()
+               .attr("fill", "yellow");
+
+            tooltip.transition()
+               .duration(200)
+               .style("opacity", .9);
+            tooltip.html(`${d.country}<br>Number of Wins: ${d.wicketMargins.length}`)
+               .style("left", (event.pageX + 5) + "px")
+               .style("top", (event.pageY - 28) + "px");
+         })
+         .on("mouseout", function (d) {
+            d3.select(this)
+               .attr("fill", d => colorScheme[d.country])
+
+            tooltip.transition()
+               .duration(500)
+               .style("opacity", 0);
+         })
+         .on("mousemove", function (event) {
+            tooltip.style("left", (event.pageX + 5) + "px")
+               .style("top", (event.pageY - 28) + "px");
+         });
 
          // Hiver tooltip for each country
          countHigh.selectAll("g.runs > .bar")
             .data(winningMarginData)
             
-
-
    }   
 }, 100);
