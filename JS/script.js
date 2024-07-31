@@ -21,14 +21,43 @@ const svg = d3.select("svg")
 
 const world_map_circle_scale = d3.scaleLinear([1, 27], [4, 17])
 
-const country_color_list = ['#f3c300', '#875692', '#f38400', '#8673A1', "#be0032",
-   "#c2b280", "#848482", "#008856", "#e68fac", "#0067a5",
-   "#f99379", "#604e97", "#f6a600", "#b3446c", "#dcd300",
-   "#882d17", "#8db600", "#654522", "#e25822", "#2b3d26",
-   "#2b3d26", "#2b3d26", "#2b3d26", "#2b3d26", "#2b3d26",
-   "#2b3d26", "#2b3d26", "#2b3d26", "#2b3d26"]
+// const country_color_list = ['#f3c300', '#875692', '#f38400', '#8673A1', "#be0032",
+//    "#c2b280", "#848482", "#008856", "#e68fac", "#0067a5",
+//    "#f99379", "#604e97", "#f6a600", "#b3446c", "#dcd300",
+//    "#882d17", "#8db600", "#654522", "#e25822", "#2b3d26",
+//    "#2b3d26", "#2b3d26", "#2b3d26", "#2b3d26", "#2b3d26",
+//    "#2b3d26", "#2b3d26", "#2b3d26", "#2b3d26"]
 
-let world_map_highlight_color_scale = {}
+// let world_map_highlight_color_scale = {}
+
+const colorScheme = {
+   "Canada": "#f3c300",
+   "United States of America": "#875692",
+   "South Africa": "#f38400",
+   "Zimbabwe": "#8673A1",
+   "Namibia": "#be0032",
+   "United Arab Emirates": "#c2b280",
+   "Oman": "#848482",
+   "India": "#008856",
+   "Bangladesh": "#e68fac",
+   "Nepal": "#0067a5",
+   "Pakistan": "#f99379",
+   "Afghanistan": "#604e97",
+   "Netherlands": "#f6a600",
+   "Ireland": "#b3446c",
+   "New Zealand": "#dcd300",
+   "Australia": "#882d17",
+   "Sri Lanka": "#8db600",
+   "United Kingdom": "#654522",
+   "England": "#654522",
+   "Scotland": "#654522",
+   "Uganda": "#e25822",
+   "Guyana": "#2b3d26",
+   "Jamaica": "#2b3d26",
+   "Trinidad and Tobago": "#2b3d26",
+   "West Indies": "#2b3d26",
+   "Papua New Guinea": "#7cddf7"
+}
 
 const tooltip = d3.select(".tooltip");
 const legend = d3.select(".legend")
@@ -63,7 +92,9 @@ infoFiles.forEach(infoFile => {
    asyncCall(infoFile)
 });
 
-let GamesWonByCountriesData = {}
+let GamesWonByCountriesData = []
+
+let totalGamesPlayed = []
 
 function checkIfFinished() {
    return fileObjArr.length == 206
@@ -74,13 +105,36 @@ let timeout = setInterval(function () {
       clearInterval(timeout);
       // console.log("file inout oibject array: ", fileObjArr)
       fileObjArr.forEach(fileObj => {
-         if (fileObj.filter(infoRow => infoRow[1] == 'winner').length != 0) {
+         if (fileObj.filter(infoRow => infoRow[1] == 'winner').length == 1 && fileObj.filter(infoRow => infoRow[1] == 'team').length == 2) {
             // console.log("file object with winner check: ", fileObj.filter(infoRow => infoRow[1] == 'winner'))
-            if (!(fileObj.find(infoRow => infoRow[1] == 'winner')[2] in GamesWonByCountriesData)) {
-               GamesWonByCountriesData[fileObj.filter(infoRow => infoRow[1] == 'winner')[0][2]] = 1
+            if (!GamesWonByCountriesData.map(country => country.name).includes(fileObj.filter(infoRow => infoRow[1] == 'team')[0][2])) {
+               GamesWonByCountriesData.push({
+                  name: fileObj.filter(infoRow => infoRow[1] == 'team')[0][2],
+                  wins: 0,
+                  played: 1
+               })
             } else {
-               GamesWonByCountriesData[fileObj.filter(infoRow => infoRow[1] == 'winner')[0][2]] += 1
+               GamesWonByCountriesData.find(country => country.name == fileObj.filter(infoRow => infoRow[1] == 'team')[0][2]).played += 1
             }
+            if (!GamesWonByCountriesData.map(country => country.name).includes(fileObj.filter(infoRow => infoRow[1] == 'team')[1][2])) {
+               GamesWonByCountriesData.push({
+                  name: fileObj.filter(infoRow => infoRow[1] == 'team')[1][2],
+                  wins: 0,
+                  played: 1
+               })
+            } else {
+               GamesWonByCountriesData.find(country => country.name == fileObj.filter(infoRow => infoRow[1] == 'team')[1][2]).played += 1
+            }
+            if (GamesWonByCountriesData.map(country => country.name).includes(fileObj.find(infoRow => infoRow[1] == 'winner')[2])) {
+               // GamesWonByCountriesData.push({
+               //    name: fileObj.filter(infoRow => infoRow[1] == 'winner')[0][2],
+               //    wins: 1
+               // })
+               GamesWonByCountriesData.find(country => country.name == fileObj.filter(infoRow => infoRow[1] == 'winner')[0][2]).wins += 1
+            } 
+            // else {
+               
+            // }
          }
       });
       console.log("winner countries and win counts: ", GamesWonByCountriesData)
@@ -92,7 +146,7 @@ let timeout = setInterval(function () {
          console.log("the countries: ", countries)
 
          // gett all countries except west indies, hong kong, and combine scotland and england into uk
-         let highlightedCountries = countries.filter(d => Object.keys(GamesWonByCountriesData).includes(d.properties.name) || d.id == '826')
+         let highlightedCountries = countries.filter(d => GamesWonByCountriesData.map(country => country.name).includes(d.properties.name) || d.id == '826')
 
          // Get list of West Indies countries and calculate centroid for West Indies
          const westIndiesCountries = countries.filter(d => ['028', '052', '212', '308', '328', '388', '659', '662', '670', '780'].includes(d.id));
@@ -101,15 +155,15 @@ let timeout = setInterval(function () {
             features: westIndiesCountries
          });
 
-         // Liost of all countries to be highlighted
+         // List of all countries to be highlighted
          let AllCountriesPlaying = highlightedCountries.concat(westIndiesCountries)
 
          // Get color for each country
-         AllCountriesPlaying.forEach(function (country, i) {
-            world_map_highlight_color_scale[AllCountriesPlaying[i].properties.name] = country_color_list[i]
-         });
+         // AllCountriesPlaying.forEach(function (country, i) {
+         //    world_map_highlight_color_scale[AllCountriesPlaying[i].properties.name] = country_color_list[i]
+         // });
 
-         console.log("the color scheme: ", world_map_highlight_color_scale)
+         console.log("the color scheme: ", colorScheme)
 
          // Build map
          svg.append("g")
@@ -123,12 +177,12 @@ let timeout = setInterval(function () {
          // Build highlighted map
          let countHigh = svg.append("g")
 
-         // Highlight, gove color and add hiver effects and tooltips
+         // Highlight, give color and add hiver effects and tooltips
          countHigh.selectAll("path")
             .data(AllCountriesPlaying)
             .enter().append("path")
             .attr("d", path)
-            .attr("fill", d => world_map_highlight_color_scale[d.properties.name])
+            .attr("fill", d => colorScheme[d.properties.name])
             .attr("stroke", "#333333")
             .on("mouseover", function (event, d) {
                d3.select(this)
@@ -138,13 +192,14 @@ let timeout = setInterval(function () {
                tooltip.transition()
                   .duration(200)
                   .style("opacity", .9);
-               tooltip.html(`${d.properties.name}<br>Number of Wins: ${GamesWonByCountriesData[d.properties.name]}`)
+               tooltip.html(`${d.properties.name}<br>Number of Wins: ${GamesWonByCountriesData.find(country=> country.name == d.properties.name).wins}
+               <br> Win Percent: ${Math.round((GamesWonByCountriesData.find(country=> country.name == d.properties.name).wins / GamesWonByCountriesData.find(country=> country.name == d.properties.name).played)*100) / 100}`)
                   .style("left", (event.pageX + 5) + "px")
                   .style("top", (event.pageY - 28) + "px");
             })
             .on("mouseout", function (d) {
                d3.select(this)
-                  .attr("fill", d => world_map_highlight_color_scale[d.properties.name])
+                  .attr("fill", d => colorScheme[d.properties.name])
 
                tooltip.transition()
                   .duration(500)
@@ -173,11 +228,12 @@ let timeout = setInterval(function () {
             .attr("cy", d => projection(d3.geoCentroid(d))[1])
             .attr("r", function (d, i) {
                if (d.id != '826') {
-                  console.log("the country is: ", d.properties.name, "and the value is: ", GamesWonByCountriesData[d.properties.name])
-                  return world_map_circle_scale(GamesWonByCountriesData[d.properties.name])
+                  console.log("the country is: ", d.properties.name, "and the value is: ", GamesWonByCountriesData.find(country=> country.name == d.properties.name).wins)
+                  return world_map_circle_scale(GamesWonByCountriesData.find(country=> country.name == d.properties.name).wins)
                } else {
-                  console.log("the wierd country is: ", d.properties.name, "and the value is: ", GamesWonByCountriesData['England'] + GamesWonByCountriesData['Scotland'])
-                  return world_map_circle_scale(GamesWonByCountriesData['England'] + GamesWonByCountriesData['Scotland'])
+                  // GamesWonByCountriesData.find(country=> country.name == d.properties.name).wins
+                  console.log("the wierd country is: ", d.properties.name, "and the value is: ", GamesWonByCountriesData.find(country=> country.name == "England").wins + GamesWonByCountriesData.find(country=> country.name == "Scotland").wins)
+                  return world_map_circle_scale(GamesWonByCountriesData.find(country=> country.name == "England").wins + GamesWonByCountriesData.find(country=> country.name == "Scotland").wins)
                }
             })
             .attr("fill", "blue")
@@ -196,11 +252,15 @@ let timeout = setInterval(function () {
                   .style("opacity", .9);
                
                if (d.id != '826') {
-                  tooltip.html(`${d.properties.name}<br>Number of Wins: ${GamesWonByCountriesData[d.properties.name]}`)
+                  tooltip.html(`${d.properties.name}<br>Number of Wins: ${GamesWonByCountriesData.find(country=> country.name == d.properties.name).wins}
+                  <br> Win Percent: ${Math.round((GamesWonByCountriesData.find(country=> country.name == d.properties.name).wins / GamesWonByCountriesData.find(country=> country.name == d.properties.name).played)*100)/100}`)
                      .style("left", (event.pageX + 5) + "px")
                      .style("top", (event.pageY - 28) + "px");
                } else {
-                  tooltip.html(`${d.properties.name}<br>Number of Wins: ${GamesWonByCountriesData['England'] + GamesWonByCountriesData['Scotland']}`)
+                  tooltip.html(`${d.properties.name}<br>Number of Wins: ${GamesWonByCountriesData.find(country=> country.name == "England").wins + GamesWonByCountriesData.find(country=> country.name == "Scotland").wins}
+                  <br> Win Percent: ${Math.round(((GamesWonByCountriesData.find(country=> country.name == "England").wins + GamesWonByCountriesData.find(country=> country.name == "Scotland").wins) / 
+                     (GamesWonByCountriesData.find(country=> country.name == "England").played + GamesWonByCountriesData.find(country=> country.name == "Scotland").played))*100) / 100
+                  }`)
                      .style("left", (event.pageX + 5) + "px")
                      .style("top", (event.pageY - 28) + "px");
                }
@@ -232,7 +292,7 @@ let timeout = setInterval(function () {
             .delay(1000)
             .attr("cx", d => projection(westIndiesCentroid)[0])
             .attr("cy", d => projection(westIndiesCentroid)[1])
-            .attr("r", d => world_map_circle_scale(GamesWonByCountriesData['West Indies']))
+            .attr("r", d => world_map_circle_scale(GamesWonByCountriesData.find(country=> country.name == "West Indies").wins))
             .attr("fill", "blue")
             .attr("opacity", 0.7)
 
@@ -245,7 +305,8 @@ let timeout = setInterval(function () {
             tooltip.transition()
                .duration(200)
                .style("opacity", .9);
-            tooltip.html(`West Indies<br>Number of Wins: ${GamesWonByCountriesData['West Indies']}`)
+            tooltip.html(`West Indies<br>Number of Wins: ${GamesWonByCountriesData.find(country=> country.name == "West Indies").wins}
+            <br> Win Percent: ${Math.round((GamesWonByCountriesData.find(country=> country.name == "West Indies").wins / GamesWonByCountriesData.find(country=> country.name == "West Indies").played)*100) / 100}`)
                .style("left", (event.pageX + 5) + "px")
                .style("top", (event.pageY - 28) + "px");
          })
@@ -341,7 +402,7 @@ let timeout = setInterval(function () {
          svg.append("text")
                .attr("x", ukCoordinates[0] - 205)
                .attr("y", ukCoordinates[1] + 90)
-               .text(`${GamesWonByCountriesData['England']} wins for England and ${GamesWonByCountriesData['Scotland']} wins for Scotland`)
+               .text(`${GamesWonByCountriesData.find(country=> country.name == "England").wins} wins for England and ${GamesWonByCountriesData.find(country=> country.name == "Scotland").wins} wins for Scotland`)
                .attr("font-size", "12px");
 
       });
